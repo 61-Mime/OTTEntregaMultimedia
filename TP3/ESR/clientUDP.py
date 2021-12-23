@@ -28,8 +28,8 @@ def udpClientSending(server):
 
     while True:
 
-        print('asdfasdf', server.destinies)
-        print('rtyrtyrtyrtyrtyr', server.queue)
+        # print('destiniesUDP', server.destinies)
+        # print('queueUDP', server.queue)
 
         while(len(server.queue) == 0):
             pass
@@ -38,10 +38,11 @@ def udpClientSending(server):
         server.queue = server.queue[1:]
 
         # print('CLOCKCLOCKCLOCKCLOCKCLOCKCLOCK')
-        # print(destinies)
-
+        print('destinies UDP:', server.destinies)
+        # print(type(eval(server.destinies)))
         if server.destinies:
             for e in server.destinies:
+                print(e)
                 server.udpSocket.sendto(firstQueueElement, (e, 7070))
         else:
             server.udpSocket.sendto(firstQueueElement, (localIP, 6060))

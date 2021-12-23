@@ -16,7 +16,7 @@ class OttNode:
         self.udpSocket.bind(('', 7070))
 
     def connectToServer(self, server):
-        clientTCP.clientTCPListening('I want to connect to server', server, self.socket, self.neighboursList, self.destinies, self.origin, self.metric)
+        clientTCP.clientTCPListening('I want to connect to server', server, self)
 
     def connectUDPListening(self):
         clientUDP.udpClientListening(self)

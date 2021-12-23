@@ -21,7 +21,7 @@ def routeTable(isFinalNode, destinies, sock, origin, metric, stats):
         # destinies = sock.recv(buff_size).decode()
         # print('Destinos:', destinies)
         # sock.sendall(destinies.encode())
-        destinies = stats[1]
+        destinies = eval(stats[1])
         origin = stats[2]
         metric = stats[3]
         print('Destinos:', destinies)
@@ -40,51 +40,53 @@ def routeTable(isFinalNode, destinies, sock, origin, metric, stats):
         # metric = eval(sock.recv(buff_size).decode())
         # print('Metrica:', metric)
         # sock.sendall(str(metric).encode())
+    return destinies
 
-
-def clientTCPListening(message, server, sock, neighboursList, destinies, origin, metric):
+# self.socket, self.neighboursList, self.destinies, self.origin, self.metric
+def clientTCPListening(message, server, node):
 
     server_address = (server, 8080)
     print('[TCP]connecting to %s port %s' % server_address)
-    sock.connect(server_address)
+    node.socket.connect(server_address)
 
     try:
 
         print('[TCP]sending "%s"' % message)
         messageToBytes = str.encode(message)
-        sock.sendall(messageToBytes)
+        node.socket.sendall(messageToBytes)
         isFinalNode = False
         reRouting = False
 
         while True:
-            data = sock.recv(buff_size).decode()
+            data = node.socket.recv(buff_size).decode()
             print('[TCP]received "%s"' % data)
             stats = data.split('|')
 
             if stats[0] == 'Sending route info.':
                     # sock.sendall('OK'.encode())
                     # print('------------------', reRouting)
-
-                    reRouting = routeTable(isFinalNode, destinies, sock, origin, metric, stats)
+                    print('oreviousdestinies', node.destinies)
+                    node.destinies = routeTable(isFinalNode, node.destinies, node.socket, node.origin, node.metric, stats)
+                    print('destinies', node.destinies)
 
             else:
                 # recebe vizinhos da topologia
                 data = eval(data)
-                neighboursList = data
+                node.neighboursList = data
                 # recebe vizinhos que estão conectados
-                neighboursConnected = isNeighbourConnected(sock)
+                neighboursConnected = isNeighbourConnected(node.socket)
                 # recebe booleano identificativo de nodo final
-                isFinalNode = eval(sock.recv(buff_size).decode())
-                sock.sendall('Received final node value'.encode())
-                print('[TCP] Final Node:', sock.recv(buff_size).decode())
+                isFinalNode = eval(node.socket.recv(buff_size).decode())
+                node.socket.sendall('Received final node value'.encode())
+                print('[TCP] Final Node:', node.socket.recv(buff_size).decode())
 
                 if isFinalNode:
-                    sock.sendall('I want the stream'.encode())
-                    print('[TCP]', sock.recv(buff_size).decode())
-                    sock.sendall('Waiting for stream...'.encode())
+                    node.socket.sendall('I want the stream'.encode())
+                    print('[TCP]', node.socket.recv(buff_size).decode())
+                    node.socket.sendall('Waiting for stream...'.encode())
                     print('Waiting for stream...')
                 else:
-                    sock.sendall('Update Routes'.encode())
+                    node.socket.sendall('Update Routes'.encode())
             # clientUDP.udpClientListening(neighboursConnected, isFinalNode)
 
     finally:

@@ -36,7 +36,7 @@ class OttServer:
         self.clientThreads[client_address] = connection
 
     def serverDestinies(self):
-        self.destiny = []
+        self.destinies = []
 
         for route in self.routes:
             for node in range(len(route)):
