@@ -1,6 +1,5 @@
 import socket
 import sys
-import clientHandler
 from threading import Thread
 import time
 import serverUDP
@@ -26,7 +25,7 @@ def nodesToConnect(client_address, server, topology):
 
     return toConnect
 
-def connectionClient(connection, client_address, topology, client_handler, server):
+def connectionClient(connection, client_address, topology, server):
     try:
         print('[TCP]connection from', client_address[0])
         server.addConnected(client_address[0])
@@ -63,14 +62,10 @@ def connectionClient(connection, client_address, topology, client_handler, serve
             elif data == 'Update Routes':
                 server.updateRoutes()
 
-            # elif data == 'OK':
-            #     server.updateRoutes()
-            #
             elif data == 'I want the stream':
                 connection.sendall('OK'.encode())
                 print('[TCP] :', connection.recv(bufferSize).decode())
                 server.updateRoutes()
-                # server.createRoute(client_address[0])
 
 
     finally:
@@ -79,7 +74,6 @@ def connectionClient(connection, client_address, topology, client_handler, serve
 
 
 def serverTCPListening(topology, server):
-    client_handler = clientHandler.ClientHandler([])
 
     sock = server.socket
 
@@ -87,14 +81,11 @@ def serverTCPListening(topology, server):
 
     sock.listen(0)
 
-    # udpThread = Thread(target=startUDPServer)
-    # udpThread.start()
-
     while True:
         print('[TCP]waiting for a connection')
         connection, client_address = sock.accept()
 
-        threadTCP = Thread(target=connectionClient, args=(connection, client_address, topology, client_handler, server))
+        threadTCP = Thread(target=connectionClient, args=(connection, client_address, topology, server))
 
         server.addClientThread(client_address[0], connection)
 

@@ -8,25 +8,14 @@ localPort   = 8080
 
 bufferSize  = 4096
 
-# Create a datagram socket
 
 def serverUDPListening():
 
     UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 
-
-
-    # Bind to address and ip
-
     UDPServerSocket.bind(('', localPort))
 
-
-
     print("[UDP] server up and listening")
-
-
-
-    # Listen for incoming datagrams
 
     while(True):
 

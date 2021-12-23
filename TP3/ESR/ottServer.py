@@ -86,18 +86,10 @@ class OttServer:
         if destiny not in finalNodes:
             # envia destinos
             print(destiny, 'routeInfo[destiny]:', routeInfo[destiny])
-            # connection.sendall(str(routeInfo[destiny]).encode())
-            # print('[TCP] Destinos:', destiny, connection.recv(4096).decode())
-            connection.sendall(('Sending route info.|' + str(routeInfo[destiny]) + '|' + str(originNode) + '|' + str(self.findMetric(destiny))).encode())
-        else:
-        # envia origem
-        # print('Origin Node:', originNode)
-        # connection.sendall(str(originNode).encode())
-        # print('[TCP] Origem de:', destiny, 'é', connection.recv(4096).decode())
-        # # envia metrica
-        # connection.sendall(str(self.findMetric(destiny)).encode())
-        # print('[TCP] Metrica:', destiny, eval(connection.recv(4096).decode()))
 
+            connection.sendall(('Sending route info.|' + str(routeInfo[destiny]) + '|' + str(originNode) + '|' + str(self.findMetric(destiny))).encode())
+
+        else:
             connection.sendall(('Sending route info.|' + str(originNode) + '|' + str(self.findMetric(destiny))).encode())
 
     def sendingRouteInfo(self):
@@ -109,11 +101,7 @@ class OttServer:
             if originNode not in finalNodes:
                 for destiny in routeInfo[originNode]:
                     connection = self.clientThreads[destiny]
-                    # print('[TCP]:', destiny, connection.recv(4096).decode())
                     self.sendRouteStats(destiny, finalNodes, routeInfo, connection, originNode)
-
-
-
 
         print('[TCP] Route Info sent to all nodes.')
 

@@ -12,15 +12,8 @@ def isNeighbourConnected(sock):
     return eval(data)
 
 def routeTable(isFinalNode, destinies, sock, origin, metric, stats):
-    # if reRouting and isFinalNode:
-    #     sock.recv(buff_size).decode()
-    #     sock.sendall('OK'.encode())
 
     if not isFinalNode:
-        # recebe destinos
-        # destinies = sock.recv(buff_size).decode()
-        # print('Destinos:', destinies)
-        # sock.sendall(destinies.encode())
         destinies = eval(stats[1])
         origin = stats[2]
         metric = stats[3]
@@ -32,17 +25,8 @@ def routeTable(isFinalNode, destinies, sock, origin, metric, stats):
         metric = stats[2]
         print('Origem:', origin)
         print('Metrica:', metric)
-    # recebe origem
-        # origin = sock.recv(buff_size).decode()
-        # print('Origem:', origin)
-        # sock.sendall(origin.encode())
-        # # recebe metrica
-        # metric = eval(sock.recv(buff_size).decode())
-        # print('Metrica:', metric)
-        # sock.sendall(str(metric).encode())
     return destinies
 
-# self.socket, self.neighboursList, self.destinies, self.origin, self.metric
 def clientTCPListening(message, server, node):
 
     server_address = (server, 8080)
@@ -63,12 +47,7 @@ def clientTCPListening(message, server, node):
             stats = data.split('|')
 
             if stats[0] == 'Sending route info.':
-                    # sock.sendall('OK'.encode())
-                    # print('------------------', reRouting)
-                    print('oreviousdestinies', node.destinies)
                     node.destinies = routeTable(isFinalNode, node.destinies, node.socket, node.origin, node.metric, stats)
-                    print('destinies', node.destinies)
-
             else:
                 # recebe vizinhos da topologia
                 data = eval(data)
@@ -87,7 +66,6 @@ def clientTCPListening(message, server, node):
                     print('Waiting for stream...')
                 else:
                     node.socket.sendall('Update Routes'.encode())
-            # clientUDP.udpClientListening(neighboursConnected, isFinalNode)
 
     finally:
         print('[TCP]Closing Socket...')
