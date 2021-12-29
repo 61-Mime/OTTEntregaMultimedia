@@ -2,7 +2,6 @@ import socket
 import sys
 from threading import Thread
 import time
-import serverUDP
 
 localIP     = "10.0.0.10"
 
