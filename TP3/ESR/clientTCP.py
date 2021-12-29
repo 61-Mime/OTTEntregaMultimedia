@@ -57,7 +57,8 @@ def clientTCPListening(message, server, node):
                 # recebe booleano identificativo de nodo final
                 isFinalNode = eval(node.socket.recv(buff_size).decode())
                 node.socket.sendall('Received final node value'.encode())
-                print('[TCP] Final Node:', node.socket.recv(buff_size).decode())
+                node.socket.recv(buff_size).decode()
+                print('[TCP] Final Node:', isFinalNode)
 
                 if isFinalNode:
                     node.socket.sendall('I want the stream'.encode())

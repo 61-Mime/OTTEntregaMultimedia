@@ -26,7 +26,6 @@ def udpClientSending(server):
 
         if server.destinies:
             for e in server.destinies:
-                print(e)
                 server.udpSocket.sendto(firstQueueElement, (e, 7070))
         else:
             server.udpSocket.sendto(firstQueueElement, (localIP, 6060))

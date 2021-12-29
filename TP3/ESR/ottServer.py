@@ -156,7 +156,6 @@ class OttServer:
                     # neighbour node is the goal
                     if neighbour == finalNode:
                         self.routes.append(new_path)
-                        print('Created routes:', self.routes)
                         return new_path
                 explored.append(node)
 
